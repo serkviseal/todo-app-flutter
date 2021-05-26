@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey_flutter/models/task_data.dart';
+import 'package:todoey_flutter/screens/add_task_sreen.dart';
+import 'package:todoey_flutter/widgets/tasks_list.dart';
 
 class TasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) => SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).padding.bottom,
+                ),
+                child: AddTaskScreen(),
+              ),
+            ),
+          );
+        },
+        backgroundColor: Colors.lightBlueAccent,
+        child: Icon(Icons.add),
+      ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
           padding:
@@ -32,7 +54,7 @@ class TasksScreen extends StatelessWidget {
               ),
             ),
             Text(
-              '12 tasks',
+              '${Provider.of<TaskData>(context).taskCount} ${Provider.of<TaskData>(context).taskCount > 1 ? 'tasks' : 'task'}',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
@@ -42,12 +64,15 @@ class TasksScreen extends StatelessWidget {
         ),
         Expanded(
           child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
             decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
-                )),
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+            child: TasksList(),
           ),
         )
       ]),
